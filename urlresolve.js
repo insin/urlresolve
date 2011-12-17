@@ -201,7 +201,7 @@ URLResolver.prototype.resolve = function(path) {
 }
 
 /**
- * Performs a reverse lookuup for a named UR pattern with given arguments,
+ * Performs a reverse lookup for a named URL pattern with given arguments,
  * constructing a URL fragment if successful.
  */
 URLResolver.prototype.reverse = function(name, args) {
@@ -246,7 +246,7 @@ function patterns(context) {
     , pattern
   for (var i = 0, l = args.length; i < l; i++) {
     pattern = args[i]
-    if (isArray(pattern)) {
+    if (is.Array(pattern)) {
       pattern = url.apply(null, pattern)
       pattern.addContext(context)
     }
@@ -263,11 +263,11 @@ function patterns(context) {
  * a list of views.
  */
 function url(pattern, view, name) {
-  if (isArray(view)) {
+  if (is.Array(view)) {
     return new URLResolver(pattern, view)
   }
   else {
-    if (isString(view)) {
+    if (is.String(view)) {
       if (!view) {
         throw new Error('Empty URL pattern view name not permitted (for pattern ' + pattern + ')')
       }
