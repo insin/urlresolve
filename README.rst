@@ -2,84 +2,136 @@
 urlresolve
 ==========
 
-Django-style URLResolvers for browsers and `Node.js`_.
+Django-style URL resolver for browsers and `Node.js`_ - resolves a path
+against a list of patterns, gives you back the handler you configured and
+any captured parameters, then backs away slowly.
 
 Browsers:
 
-   * `urlresolve.js`_ (depends on the is, func, format and re components of `isomorph`_)
+* `urlresolve.js`_ (depends on the ``is``, ``func``, ``format`` and
+  ``re`` components of `isomorph`_)
 
 Node.js::
 
    npm install urlresolve
 
-URL patterns can be configuredto map URLs to handlers, capturing named
-parameters in the process, and to reverse-resolve a URL name and parameters
-to obtain a URL.
-
 .. _`Node.js`: http://nodejs.org
 .. _`urlresolve.js`: https://raw.github.com/insin/urlresolve/master/urlresolve.js
 .. _`isomorph`: https://github.com/insin/isomorph
 
+Basic Usage
+===========
+
+Declare some URL patterns::
+
+   var url = urlresolve.url
+
+   var Views = {
+     index: function() { }
+   , list: function() { }
+   , detail: function(id) { }
+   }
+
+   var urlpatterns = urlresolve.patterns(Views
+   , url('',             'index',  'index')
+   , url('things/',      'list',   'thing_list')
+   , url('things/:id/'), 'detail', 'thing_detail')
+   )
+
+Create a resolver to make use them::
+
+   var resolver = urlresolve.getResolver(urlpatterns)
+
+Resolve some paths::
+
+   var match = resolver.resolve('/')
+   // match.func is Views.index, bound to Views
+   // match.urlName is 'index'
+
+   match = resolver.resolve('/things/123/')
+   // match.func is Views.detail, bound to Views
+   // match.args is ['123']
+   // match.urlName is 'thing_detail'
+
+   try {
+     resolver.resolve('/notthere/')
+   }
+   catch (e) {
+     // e is a urlresolve.Resolver404 and contains details of the patterns
+     // it tried to match against
+   }
+
+Decouple your URLs by naming them and constructing URLs names and
+arguments::
+
+   resolver.reverse('index')               // '/'
+   resolver.reverse('thing_list')          // '/things/'
+   resolver.reverse('thing_detail', [123]) // '/things/123/'
+
+   try {
+     resolver.reverse('blah')
+   }
+   catch (e) {
+     // e is a urlresolve.NoReverseMatch
+   }
+
 Creating URL Patterns
 =====================
 
-``patterns(context, patterns...)``
-----------------------------------
+``urlresolve.patterns(context, pattern1[, pattern2, ...])``
+-----------------------------------------------------------
 
-   Creates a list of URL patterns, which can be specified using the ``url``
-   function or a list of [pattern, handler, urlName].
+Creates a list of URL patterns, which can be specified using the ``url``
+function or a list of [pattern, handler, urlName].
 
-   Handler propertyies can be specified as strings to be looked up from a
-   context object, which should be passed as the first argument in that case,
-   otherwise it should be ``null`` or falsy.
+Handler properties can be specified as strings to be looked up from a
+context object, which should be passed as the first argument in that case,
+otherwise it should be ``null`` or falsy.
 
-``url(pattern, view, urlName)``
--------------------------------
+``urlresolve.url(pattern, view, urlName)``
+------------------------------------------
 
-   Creates a URL pattern or roots a list of patterns to the given pattern if
-   a list of views. The URL name is used in reverse URL lookups and should be
-   unique.
+Creates a URL pattern or roots a list of patterns to the given pattern if
+``view`` is a list of URL patterns.
 
-   Patterns:
+The URL name is used in reverse URL lookups and should be unique.
 
-   * Should not start with a leading slash, but should end with a trailing slash
-     if being used to root other patterns, otherwise to your own taste.
+Patterns:
 
-   * Can identify named parameters to be extracted from resolved URLS using a
-     leading ``:``, e.g.::
+* Should not start with a leading slash, but should end with a trailing slash
+  if being used to root other patterns, otherwise to your own taste.
 
-        widgets/:id/edit/
+* Can identify named parameters to be extracted from resolved URLS using a
+  leading ``":"``, e.g.::
+
+     widgets/:id/edit/
 
 Using URL Patterns
 ==================
 
-``getResolver(patterns)``
--------------------------
+``urlresolve.getResolver(patterns)``
+------------------------------------
 
-   Initialises a URLResolver with the given URL patterns and provides a
-   convenience interface for using it repeatedly.
+Creates a ``urlresolve.URLResolver`` with the given URL patterns and
+provides an interface for using it repeatedly.
 
-   Returns an Object with the following API:
+Returns an Object with the following API:
 
-   ``patterns``
+``patterns``
+   The URL patterns which were passed into ``getResolver``.
 
-      The URL patterns which were passed into ``getResover``.
+``resolver``
+   The root URLResolver created with the given URL patterns.
 
-   ``resolver``
+``resolve(path)``
+   Resolves the given URL path, returning an object with ``func``, ``args``
+   and ``urlName`` properties if successful, otherwise throwing a
+   ``Resolver404`` error.
 
-      The root URLResolver created with the given URL patterns.
-
-   ``resolve(path)``
-
-      Resolves the given URL path, returning an object with ``func``, ``args`` and
-      ``urlName`` properties if successful, otherwise throwing a ``Resolver404``
-      error.
-
-   ``reverse(urlName, args)``
-
-      Reverse-resolves the given named URL with the given args (if applicable),
-      returning a URL string if successful, otherwise throwing a ``NoReverseMatch``
-      error.
+``reverse(urlName[, args])``
+   Reverse-resolves the given named URL, with the given Array of args if
+   provided, returning a URL string if successful, otherwise throwing a
+   ``NoReverseMatch`` error.
 
 MIT License
 ===========
