@@ -1,9 +1,9 @@
 {
   "name": "urlresolve",
   "description": "Resolves paths against URL patterns",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Jonathan Buchanan <jonathan.buchanan@gmail.com> (https://github.com/insin)",
-  "tags": ["url", "resolve", "router"],
+  "tags": ["url", "resolve", "reverse", "routes"],
   "main": "urlresolve",
   "repository": {
     "type": "git",
