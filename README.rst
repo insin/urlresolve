@@ -1,6 +1,9 @@
-==========
-urlresolve
-==========
+==========================
+urlresolve |travis_status|
+==========================
+
+.. |travis_status| image:: https://secure.travis-ci.org/insin/urlresolve.png
+   :target: http://travis-ci.org/insin/urlresolve
 
 Django-style URL resolver for browsers and `Node.js`_ - resolves a path
 against a list of patterns, gives you back the handler you configured and
