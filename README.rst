@@ -11,8 +11,7 @@ any captured parameters, then backs away slowly.
 
 Browsers:
 
-* `urlresolve.js`_ (depends on the ``is``, ``func``, ``format`` and
-  ``re`` components of `isomorph`_)
+* `urlresolve.js`_
 
 Node.js::
 
@@ -20,7 +19,6 @@ Node.js::
 
 .. _`Node.js`: http://nodejs.org
 .. _`urlresolve.js`: https://raw.github.com/insin/urlresolve/master/urlresolve.js
-.. _`isomorph`: https://github.com/insin/isomorph
 
 Basic Usage
 ===========
