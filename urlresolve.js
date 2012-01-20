@@ -1,5 +1,5 @@
 /**
- * urlresolve 0.0.3 - https://github.com/insin/urlresolve
+ * urlresolve 0.0.4 - https://github.com/insin/urlresolve
  * MIT Licensed
  */
 ;(function() {
@@ -91,22 +91,17 @@ require.define("isomorph/lib/func", function(module, exports, require) {
 var slice = Array.prototype.slice
 
 /**
- * Binds a function with a calling context and (optionally) some partially
- * applied arguments.
+ * Binds a function with a call context and (optionally) some partially applied
+ * arguments.
  */
 function bind(fn, ctx) {
-  var partial = null
-  if (arguments.length > 2) {
-    partial = slice.call(arguments, 2)
-  }
+  var partial = (arguments.length > 2 ? slice.call(arguments, 2) : null)
   var f = function() {
-    if (partial) {
-      return fn.apply(ctx, partial.concat(slice.call(arguments)))
-    }
-    return fn.apply(ctx, arguments)
+    var args = (partial ? partial.concat(slice.call(arguments)) : arguments)
+    return fn.apply(ctx, args)
   }
-  f.func = fn
-  f.boundTo = ctx
+  f.__func__ = fn
+  f.__context__ = ctx
   return f
 }
 
@@ -118,8 +113,8 @@ module.exports = {
 require.define("isomorph/lib/format", function(module, exports, require) {
 var is = require('./is')
   , slice = Array.prototype.slice
-  , formatRegExp = /%s/g
-  , formatObjRegExp = /{(\w+)}/g
+  , formatRegExp = /%[%s]/g
+  , formatObjRegExp = /({{?)(\w+)}/g
 
 /**
  * Replaces %s placeholders in a string with positional arguments.
@@ -133,14 +128,14 @@ function format(s) {
  */
 function formatArr(s, a) {
   var i = 0
-  return s.replace(formatRegExp, function() { return a[i++] })
+  return s.replace(formatRegExp, function(m) { return m == '%%' ? '%' : a[i++] })
 }
 
 /**
- * Replaces {prop} placeholders in a string with object properties.
+ * Replaces {propertyName} placeholders in a string with object properties.
  */
 function formatObj(s, o) {
-  return s.replace(formatObjRegExp, function(m, p) { return o[p] })
+  return s.replace(formatObjRegExp, function(m, b, p) { return b.length == 2 ? m.slice(1) : o[p] })
 }
 
 module.exports = {
@@ -190,6 +185,8 @@ var is = require('isomorph/lib/is')
   , func = require('isomorph/lib/func')
   , format = require('isomorph/lib/format')
   , re = require('isomorph/lib/re')
+
+var slice = Array.prototype.slice
 
 /**
  * Thrown when a URLResolver fails to resolve a URL against known URL patterns.
@@ -488,7 +485,8 @@ function getResolver(patterns) {
 }
 
 module.exports = {
-  url: url
+  version: '0.0.4'
+, url: url
 , patterns: patterns
 , getResolver: getResolver
 , URLPattern: URLPattern

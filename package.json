@@ -1,7 +1,7 @@
 {
   "name": "urlresolve",
   "description": "Resolves paths against URL patterns",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "Jonathan Buchanan <jonathan.buchanan@gmail.com> (https://github.com/insin)",
   "tags": ["url", "resolve", "reverse", "routes"],
   "main": "./lib/urlresolve",

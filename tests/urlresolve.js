@@ -56,8 +56,8 @@ test('URLPattern', function() {
   p.addContext(view)
   equal(Object.prototype.toString.call(p.callback), '[object Function]',
         'addContext() sets the callback if callback name is set')
-  equal(p.callback.func, view.cb, 'Callback function is bound...')
-  equal(p.callback.boundTo, view, '...to the given context object')
+  equal(p.callback.__func__, view.cb, 'Callback function is bound...')
+  equal(p.callback.__context__, view, '...to the given context object')
 
   // Named parameters :like :this will generate capturing RegExps
   var p = new URLPattern('test/:id/')
