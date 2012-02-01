@@ -1,6 +1,11 @@
-var qunit = require('qunit')
-  , path = require('path')
+var path = require('path')
 
-qunit.run({ code: {path: path.join(__dirname, '../lib/urlresolve.js'), namespace: 'urlresolve'}
-          , tests: [path.join(__dirname, 'urlresolve.js')]
-          })
+var qqunit = require('qqunit')
+
+global.urlresolve = require('../lib/urlresolve')
+
+var tests = [path.join(__dirname, 'urlresolve.js')]
+
+qqunit.Runner.run(tests, function(stats) {
+  process.exit(stats.failed)
+})
