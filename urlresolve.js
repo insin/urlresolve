@@ -1,5 +1,5 @@
 /**
- * urlresolve 0.0.4 - https://github.com/insin/urlresolve
+ * urlresolve 0.0.5 - https://github.com/insin/urlresolve
  * MIT Licensed
  */
 ;(function() {
@@ -295,7 +295,7 @@ function URLResolver(pattern, urlPatterns) {
   this.pattern = pattern
   // Resolvers start by matching a prefix, so anchor to start of the input
   this.regex = new RegExp('^' + patternToRE.call(this, pattern))
-  this.urlPatterns = urlPatterns
+  this.urlPatterns = urlPatterns || []
   this._reverseLookups = null
 }
 

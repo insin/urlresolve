@@ -1,3 +1,10 @@
+0.0.5 / 2012-02-05
+==================
+
+* Changed URLResolver to default patterns to an empty Array, so users get an
+  failure to resolve or reverse rather than a big fat Error, should they pass in
+  a falsy patterns argument
+
 0.0.4 / 2012-01-20
 ==================
 
