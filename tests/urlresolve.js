@@ -183,6 +183,7 @@ test('URLResolver', function() {
             'Reverse lookups are now populated')
 })
 
+/*
 test('patterns', function() {
 })
 
@@ -194,5 +195,6 @@ test('resolve', function() {
 
 test('reverse', function() {
 })
+*/
 
 })()
