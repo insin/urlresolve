@@ -2,3 +2,5 @@
 .travis.yml
 support
 tests
+/urlresolve.js
+/urlresolve.min.js

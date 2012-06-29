@@ -5,11 +5,11 @@ var buildumb = require('buildumb')
 buildumb.build({
   root: path.normalize(path.join(__dirname, '..'))
 , modules: {
-    'node_modules/isomorph/lib/is.js'     : ['isomorph/lib/is', './is']
-  , 'node_modules/isomorph/lib/func.js'   : 'isomorph/lib/func'
-  , 'node_modules/isomorph/lib/format.js' : 'isomorph/lib/format'
-  , 'node_modules/isomorph/lib/re.js'     : 'isomorph/lib/re'
-  , 'lib/urlresolve.js'                   : 'urlresolve'
+    'node_modules/isomorph/is.js'     : ['isomorph/is', './is']
+  , 'node_modules/isomorph/func.js'   : 'isomorph/func'
+  , 'node_modules/isomorph/format.js' : 'isomorph/format'
+  , 'node_modules/isomorph/re.js'     : 'isomorph/re'
+  , 'lib/urlresolve.js'               : 'urlresolve'
   }
 , exports: {
     'urlresolve': 'urlresolve'

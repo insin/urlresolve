@@ -1,5 +1,5 @@
 /**
- * urlresolve 0.0.5 - https://github.com/insin/urlresolve
+ * urlresolve 0.0.6 - https://github.com/insin/urlresolve
  * MIT Licensed
  */
 ;(function() {
@@ -22,7 +22,7 @@
     }
   }
 
-require.define(["isomorph/lib/is","./is"], function(module, exports, require) {
+require.define(["isomorph/is","./is"], function(module, exports, require) {
 var toString = Object.prototype.toString
 
 // Type checks
@@ -87,7 +87,7 @@ module.exports = {
 }
 })
 
-require.define("isomorph/lib/func", function(module, exports, require) {
+require.define("isomorph/func", function(module, exports, require) {
 var slice = Array.prototype.slice
 
 /**
@@ -110,7 +110,7 @@ module.exports = {
 }
 })
 
-require.define("isomorph/lib/format", function(module, exports, require) {
+require.define("isomorph/format", function(module, exports, require) {
 var is = require('./is')
   , slice = Array.prototype.slice
   , formatRegExp = /%[%s]/g
@@ -138,14 +138,36 @@ function formatObj(s, o) {
   return s.replace(formatObjRegExp, function(m, b, p) { return b.length == 2 ? m.slice(1) : o[p] })
 }
 
+var units = 'kMGTPEZY'
+  , stripDecimals = /\.00$|0$/
+
+/**
+ * Formats bytes as a file size with the appropriately scaled units.
+ */
+function fileSize(bytes, threshold) {
+  threshold = Math.min(threshold || 768, 1024)
+  var i = -1
+    , unit = 'bytes'
+    , size = bytes
+  while (size > threshold && i < units.length) {
+    size = size / 1024
+    i++
+  }
+  if (i > -1) {
+    unit = units.charAt(i) + 'B'
+  }
+  return size.toFixed(2).replace(stripDecimals, '') + ' ' + unit
+}
+
 module.exports = {
   format: format
 , formatArr: formatArr
 , formatObj: formatObj
+, fileSize: fileSize
 }
 })
 
-require.define("isomorph/lib/re", function(module, exports, require) {
+require.define("isomorph/re", function(module, exports, require) {
 var is = require('./is')
 
 /**
@@ -181,10 +203,10 @@ module.exports = {
 })
 
 require.define("urlresolve", function(module, exports, require) {
-var is = require('isomorph/lib/is')
-  , func = require('isomorph/lib/func')
-  , format = require('isomorph/lib/format')
-  , re = require('isomorph/lib/re')
+var is = require('isomorph/is')
+  , func = require('isomorph/func')
+  , format = require('isomorph/format')
+  , re = require('isomorph/re')
 
 var slice = Array.prototype.slice
 
